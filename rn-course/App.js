@@ -1,45 +1,43 @@
 import React from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 
+import PlaceInput from "./src/components/PlaceInput/PlaceInput";
+import PlaceList from "./src/components/PlaceList/PlaceList";
+
+
 export default class App extends React.Component {
 
     state = {
-        placeName: "",
         places: []
     };
 
-    placeNameChangeHandler = val => {
-        console.log("placeNameChangeHandler = val => {");
-        console.log(val);
-        this.setState({
-            placeName: val
+    placeAddedHandler = placeName => {
+        this.setState(prevState => {
+            return {
+                places: prevState.places.concat(placeName)
+            };
         });
     };
 
-    placeSubmitHandler = () => {
-        if (this.state.placeName.trim() === "") {
-            return;
-        }
+    placeDeletedHandler = index => {
         this.setState(prevState => {
             return {
-                places: prevState.placeName.concat(prevState.placeName)
-            }
-        })
+                places: prevState.places.filter((place, i) => {
+                    return i !== index;
+                })
+            };
+        });
     };
 
     render() {
-        const placeOutput = this.state.places.map((place, i) => <Text key={i}> {place} </Text>);
         return (
             <View style={styles.container}>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        placeholder="An asweone place"
-                        style={styles.placeInput}
-                        value={this.state.placeName}
-                        onChangeText={this.placeNameChangeHandler}/>
-                    <Button title="Add" style={styles.placeButton} onPress={this.placeSubmitHandler}/>
-                </View>
-                <View> {placeOutput} </View>
+                <PlaceInput onPlaceAdded={this.placeAddedHandler} />
+                <PlaceList
+                    places={this.state.places}
+                    onItemPressed={this.state.places}
+                    onItemDeleted={this.placeDeletedHandler}
+                />
             </View>
         );
     }
@@ -52,18 +50,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start',
-    },
-    inputContainer: {
-        // flex: 1,
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: "center"
-    },
-    placeInput: {
-        width: '70%'
-    },
-    placeButton: {
-        width: '30%'
     }
 });
