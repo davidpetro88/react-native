@@ -1,7 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-
-import placeImage from './src/assets/beautiful-place.jpg';
+import {StyleSheet, View} from 'react-native';
 import PlaceInput from "./src/components/PlaceInput/PlaceInput";
 import PlaceList from "./src/components/PlaceList/PlaceList";
 
@@ -13,11 +11,15 @@ export default class App extends React.Component {
     };
 
 
-
     placeAddedHandler = placeName => {
         this.setState(prevState => {
             return {
-                places: prevState.places.concat({key: Math.random(), value: placeName, image: placeImage})
+                places: prevState.places.concat({
+                    key: Math.random(), value: placeName, image: {
+                        uri:
+                            "https://c1.staticflickr.com/5/4096/4744241983_34023bf303_b.jpg"
+                    }
+                })
             };
         });
     };
@@ -35,7 +37,7 @@ export default class App extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <PlaceInput onPlaceAdded={this.placeAddedHandler} />
+                <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
                 <PlaceList
                     places={this.state.places}
                     // onItemPressed={this.state.places}
