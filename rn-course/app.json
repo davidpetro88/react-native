@@ -1,4 +1,6 @@
 {
+  "name": "rn-course",
+  "displayName": "Rn-Course",
   "expo": {
     "name": "rn-course",
     "slug": "rn-course",
