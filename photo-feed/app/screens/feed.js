@@ -58,7 +58,7 @@ class Feed extends React.Component {
         });
 
         var that = this;
-        database.ref('photos').orderByChild('posted').once('value').then(function (snapshot) {
+            database.ref('photos').orderByChild('posted').once('value').then(function (snapshot) {
             const exist = (snapshot !== null);
             if (exist) {
                 data = snapshot.val();
@@ -66,7 +66,7 @@ class Feed extends React.Component {
 
                 for (var photo in data) {
                     var photoObj = data[photo];
-                    database.ref('users').child(photoObj.author).once('value').then(function (snapshot) {
+                    database.ref('users').child(photoObj.author).child('username').once('value').then(function(snapshot){
                         if (exist) {
                             data = snapshot.val();
                             photo_feed.push({
