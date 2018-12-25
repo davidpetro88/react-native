@@ -7,4 +7,6 @@ npm-debug.*
 *.mobileprovision
 
 .idea/*
-photo-feed/config/*
+photo-feed/config/**
+config/*
+config/**/*
