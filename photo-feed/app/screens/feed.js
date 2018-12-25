@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList, Image, Text, View} from 'react-native';
+import {f,  auth, database, storage} from "../../config/config";
 
 class Feed extends React.Component {
 
