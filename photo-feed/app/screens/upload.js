@@ -1,15 +1,82 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {f} from "../../config/config";
+import { Permissions, ImagePicker } from 'expo';
 
 class Upload extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loggedin: false
+            loggedin: false,
+            imageId: '0'
         }
     }
+
+    _checkPermissions = async () => {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ camera: status });
+
+        const { statusRoll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        this.setState({ cameraRoll: statusRoll });
+    };
+
+    s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1)
+    };
+
+    uniqueId = () => {
+        return this.s4() + this.s4() + '-' + this.s4() + '-' +
+            this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4();
+    };
+
+    findNewImage = () => {
+        this._checkPermissions();
+
+        let result = ImagePicker.launchImageLibraryAsync({
+            mediaTypes: 'Images',
+            allowsEditing: true,
+            quality: 1
+        });
+
+        console.log(result);
+        if (!result.cancelled) {
+            console.log('upload image');
+            this.uploadImage(result.uri)
+        } else {
+            console.log('cancel')
+        }
+    };
+
+    uploadImage = async uri => {
+        //
+        var that = this;
+        var userid = f.auth().currentUser.uid;
+        var imageId = this.state.imageId;
+
+        var re = /(?:\.([^.]+))?$/;
+        var ext = re.exec(uri)[1];
+        this.setState({
+            currentFileType: ext,
+            uploading: true
+        });
+
+        /*const response = await fetch(uri);
+        const blob = await response.blob();*/
+        var FilePath = imageId + "." + that.state.currentFileType;
+
+        const oReq = new XMLHttpRequest();
+        oReq.open("GET", uri, true);
+        oReq.responseType = "blob";
+        oReq.onload = () => {
+            const blob = oReq.response;
+            //Call function to complete upload with the new blob to handle the uploadTask.
+            this.completeUploadBlob(blob, FilePath);
+        };
+        oReq.send();
+    };
 
     componentDidMount = () => {
         var that = this;
@@ -36,7 +103,11 @@ class Upload extends React.Component {
                         //are logged in
                         <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{fontSize:28,paddingBottom:15}}> Upload </Text>
-                            <Text> Select Photo</Text>
+                            <TouchableOpacity
+                                onPress={() => this.findNewImage()}
+                                style={{paddingVertical:10,paddingHorizontal:20,backgroundColor:'blue',borderRadius:5}}>
+                                <Text style={{color:'white'}}> Select Photo</Text>
+                            </TouchableOpacity>
                         </View>
                     ) : (
                         //not logged in
