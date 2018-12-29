@@ -1,6 +1,6 @@
 import React from 'react';
-import {FlatList, Image, Text, View} from 'react-native';
-import {database} from "../../config/config";
+import { TouchableOpacity, FlatList, Image, Text, View } from 'react-native';
+import { database } from "../../config/config";
 
 class Feed extends React.Component {
 
@@ -68,13 +68,14 @@ class Feed extends React.Component {
                     var photoObj = data[photo];
                     database.ref('users').child(photoObj.author).child('username').once('value').then(function(snapshot){
                         if (exist) {
-                            data = snapshot.val();
+                            dataAuhtor = snapshot.val();
                             photo_feed.push({
                                 id: photo,
                                 url: photoObj.url,
                                 caption: photoObj.caption,
                                 posted: that.timeConverter(photoObj.posted),
-                                author: data.username
+                                author: dataAuhtor,
+                                authorId: photoObj.author
                             });
 
                             that.setState({
@@ -129,7 +130,12 @@ class Feed extends React.Component {
                                         justifyContent: 'space-between'
                                     }}>
                                         <Text> {item.posted} </Text>
-                                        <Text> {item.author} </Text>
+                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('User', {
+                                            userId: item.authorId
+                                        })}>
+                                            <Text> {item.author} </Text>
+                                        </TouchableOpacity>
+
                                     </View>
                                     <View>
                                         <Image
@@ -138,7 +144,15 @@ class Feed extends React.Component {
                                     </View>
                                     <View style={{padding: 5}}>
                                         <Text> {item.caption} </Text>
-                                        <Text style={{marginTop: 10, textAlign: 'center'}}> View comments... </Text>
+
+                                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Comments', {
+                                            userId: item.id
+                                        })}>
+                                            <Text style={{color: 'blue', marginTop: 10, textAlign: 'center'}}>
+                                                [View comments]
+                                            </Text>
+                                        </TouchableOpacity>
+
                                     </View>
                                 </View>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {f} from "../../config/config";
 
-class Upload extends React.Component {
+class Comments extends React.Component {
 
     constructor(props) {
         super(props);
@@ -30,19 +30,16 @@ class Upload extends React.Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 {
                     this.state.loggedin == true ? (
                         //are logged in
-                        <View style={{flex: 1,justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{fontSize:28,paddingBottom:15}}> Upload </Text>
-                            <Text> Select Photo</Text>
-                        </View>
+                        <Text> Comments </Text>
                     ) : (
                         //not logged in
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             <Text> You are not logged in </Text>
-                            <Text> Please login to upload a photo </Text>
+                            <Text> Please login to post a comment </Text>
                         </View>
                     )}
             </View>
@@ -50,4 +47,4 @@ class Upload extends React.Component {
     }
 }
 
-export default Upload;
+export default Comments;
