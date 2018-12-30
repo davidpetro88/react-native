@@ -51,6 +51,30 @@ class Feed extends React.Component {
         return Math.floor(seconds) + ' second'+ this.pluralCheck(seconds);
     };
 
+    addToFlatList = (photo_feed, data, photo) => {
+        var that = this;
+        var photoObj = data[photo];
+        database.ref('users').child(photoObj.author).child('username').once('value').then(function(snapshot){
+            const exist = (snapshot !== null);
+            if (exist) {
+                dataAuhtor = snapshot.val();
+                photo_feed.push({
+                    id: photo,
+                    url: photoObj.url,
+                    caption: photoObj.caption,
+                    posted: that.timeConverter(photoObj.posted),
+                    author: dataAuhtor,
+                    authorId: photoObj.author
+                });
+
+                that.setState({
+                    refresh: false,
+                    loading: false
+                });
+            }
+        }).catch(error => console.log(error));
+    };
+
     loadFeed = () => {
         this.setState({
             refresh: true,
@@ -65,26 +89,7 @@ class Feed extends React.Component {
                 var photo_feed = that.state.photo_feed;
 
                 for (var photo in data) {
-                    var photoObj = data[photo];
-                    database.ref('users').child(photoObj.author).child('username').once('value').then(function(snapshot){
-                        if (exist) {
-                            dataAuhtor = snapshot.val();
-                            photo_feed.push({
-                                id: photo,
-                                url: photoObj.url,
-                                caption: photoObj.caption,
-                                posted: that.timeConverter(photoObj.posted),
-                                author: dataAuhtor,
-                                authorId: photoObj.author
-                            });
-
-                            that.setState({
-                                refresh: false,
-                                loading: false
-                            });
-                        }
-                    }).catch(error => console.log(error));
-
+                    that.addToFlatList(photo_feed,data,photo);
                 }
             }
         }).catch(error => console.log(error));

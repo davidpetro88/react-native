@@ -52,7 +52,7 @@ var config = {
     "photos":{
       //Anyone can read photos
       ".read": true,
-    	"$photoId":{
+    	"$photoId": {
         //Can only write or edit if you are the author
         ".write": "root.child('photos').child($photoId).child('author').val() == auth.uid || newData.child('author').val() == auth.uid",
         "author":{
@@ -61,7 +61,7 @@ var config = {
       }
     },
     "users": {
-      "$userId":{
+      "$userId": {
       	".read": "auth.uid == $userId",
         ".write": "auth.uid == $userId",
         "username": {
@@ -73,8 +73,11 @@ var config = {
         "avatar": {
         	".read": true
         },
+        "photos": {
+        	".read": true
+        },
         "email": {
-        	".read": "auth.uid == $userId"
+          ".read": "auth.uid == $userId"
         }
       }
     },
@@ -102,5 +105,12 @@ var config = {
 ![](img/firebase/firebase5.png)
 
 ![](img/firebase/firebase10.png)
+
+
+- Firebase storage
+
+![](img/firebase/firebase11.png)
+
+![](img/firebase/firebase12.png)
 
 ----------------------------------------------------------------------
