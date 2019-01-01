@@ -7,11 +7,6 @@ class Feed extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            photo_feed: [],
-            refresh: false,
-            loading: true
-        }
     }
 
     componentDidMount = () => {

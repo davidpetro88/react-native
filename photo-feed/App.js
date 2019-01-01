@@ -1,7 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import { auth } from "./config/config";
+import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 
 import Feed from './app/screens/feed';
 import Upload from './app/screens/upload';
@@ -30,17 +28,7 @@ export default class App extends React.Component {
 
     constructor(props){
         super(props);
-        this.login();
     }
-
-    login = async () => {
-        //force user to login
-        try {
-            let user = await auth.signInWithEmailAndPassword("test@user.com", "password")
-        }catch (error) {
-            console.log(error)
-        }
-    };
 
     render() {
         return (
@@ -48,12 +36,3 @@ export default class App extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

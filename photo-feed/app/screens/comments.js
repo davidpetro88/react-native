@@ -1,6 +1,7 @@
 import React from 'react';
 import {FlatList, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {database, f} from "../../config/config";
+import UserAuth from "../components/userAuth";
 
 class Comments extends React.Component {
 
@@ -38,7 +39,8 @@ class Comments extends React.Component {
                     authorId: commentObj.author
                 });
 
-                that.setState({refresh: false, loggedin: false})
+                // that.setState({refresh: false, loggedin: false})
+                that.setState({refresh: false});
             }
         }).catch(error => console.log(error));
     };
@@ -78,7 +80,7 @@ class Comments extends React.Component {
 
 
     pluralCheck = (s) => {
-        if (s == 1) {
+        if (s === 1) {
             return ' ago';
         } else {
             return 's ago';
@@ -116,13 +118,11 @@ class Comments extends React.Component {
         f.auth().onAuthStateChanged(function (user) {
             if (user) {
                 //Logged
-                that.setState({
-                    loggedin: true
-                })
+                alert("logged");
+                that.setState({loggedin: true});
             } else {
-                that.setState({
-                    loggedin: false
-                })
+                alert("loggedin");
+                that.setState({loggedin: false});
             }
 
         });
@@ -215,9 +215,9 @@ class Comments extends React.Component {
                         />
                     )}
 
-                    {this.state.loggedin == true ? (
+                    {this.state.loggedin === true ? (
                         <KeyboardAvoidingView behavior="padding" enable style={{
-                            borderTopWidth: 1, borderTopColor: 'grey',
+                             borderTopColor: 'grey', borderTopWidth: 1,
                             padding: 10, marginBottom: 15, width: '100%'
                         }}>
                             <Text style={{fontWeight: 'bold'}}> Post Comment </Text>
@@ -241,12 +241,8 @@ class Comments extends React.Component {
                         </KeyboardAvoidingView>
 
                     ) : (
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text> You are not logged in </Text>
-                            <Text> Please login to post a comment </Text>
-                        </View>
+                        <UserAuth message={'Please login to view your profile'}/>
                     )}
-
                 </View>
 
             </View>

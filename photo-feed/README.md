@@ -114,3 +114,10 @@ var config = {
 ![](img/firebase/firebase12.png)
 
 ----------------------------------------------------------------------
+
+
+- User Test
+```
+Email : test@user.com 
+Passsword: password
+```
